@@ -1,6 +1,21 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
+import { FaPause, FaPlay } from 'react-icons/fa';
 
 const Hero = () => {
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  // Ref to control the video element
+  const videoRef = useRef(null);
+
+  // Toggle play/pause
+  const togglePlayPause = () => {
+    if (isPlaying) {
+      videoRef.current.pause();
+    } else {
+      videoRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
   return (
     <section className="relative h-[150vh]  bg-floraPink">
         
@@ -23,13 +38,25 @@ const Hero = () => {
           </button>
         </div>
 
-        <div className="h-[80vh] w-[100vw] flex items-center justify-center  opacity-80">
-        <video
-            muted
-            className="w-[90vw]  h-[90%] rounded-[50px] object-cover"
-            src="https://res.cloudinary.com/dswehdo2v/video/upload/v1736824649/WhatsApp_Video_2025-01-14_at_05.10.55_84c3cd94_ryeqw8.mp4" // Sample video (replace with your own)
-          />
-        </div>
+        <div className="h-[80vh] w-[100vw] flex items-center justify-center opacity-80 relative">
+      {/* Video */}
+      <video
+        ref={videoRef}
+        muted
+        loop // Optional: Remove if you don't want the video to loop
+        className="w-[90vw] h-[90%] rounded-[20px] object-cover"
+        src="https://res.cloudinary.com/dswehdo2v/video/upload/v1742515979/WhatsApp_Video_2025-03-21_at_01.52.11_e6c1c29c_vwe59v.mp4"
+      />
+
+      {/* Custom Play/Pause Icon */}
+      <button
+        onClick={togglePlayPause}
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-floraPink/70 rounded-full p-4 text-white hover:bg-floraPink hover:scale-110 transition-all duration-300"
+        aria-label={isPlaying ? "Pause video" : "Play video"}
+      >
+        {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
+      </button>
+    </div>
        
       </section>
   )

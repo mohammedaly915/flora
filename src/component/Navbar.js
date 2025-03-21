@@ -1,104 +1,73 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { FaBars, FaTimes, FaShoppingCart, FaSearch } from "react-icons/fa";
+import React from "react";
+import { Link, NavLink } from "react-router-dom";
+import { FaSearch, FaShoppingCart } from "react-icons/fa";
 
-// NavItem Component
-const NavItem = ({ to, label, isMobile, onClick }) => {
-  const location = useLocation();
-  const isActive = location.pathname === to;
-
+// NavItem Component for navigation links
+const NavItem = ({ to, label }) => {
   return (
-    <Link
+    <NavLink
       to={to}
-      className={`${
-        isActive ? "text-floraPink font-semibold" : "hover:text-floraPink"
-      } ${isMobile ? "block py-2" : ""}`}
+      className={({ isActive }) =>
+        `text-gray-800 font-medium transition-all duration-300 hover:text-floraPink hover:scale-105 ${
+          isActive ? "text-floraPink" : ""
+        }`
+      }
       style={{ textDecoration: "none" }}
-      onClick={isMobile ? onClick : undefined}
     >
       {label}
-    </Link>
+    </NavLink>
   );
 };
 
-// Navbar Component
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  // Navigation items data
   const navItems = [
     { to: "/", label: "الرئيسية" },
-    { to: "/shop", label: "المتجر" },
-    { to: "/gallery", label: "معرض الصور" },
-    { to: "/contact-us", label: "اتصل بنا" },
-    { to: "/about-us", label: "من نحن" },
+  { to: "/shop", label: "المتجر" },
+  { to: "/gallery", label: "معرض الصور" },
+  { to: "/contact-us", label: "اتصل بنا" },
+  { to: "/about-us", label: "من نحن" },
   ];
 
   return (
-    <nav className="fixed top-0 w-full bg-floraPeach text-white shadow-md z-50">
-      <div className="container mx-auto flex items-center  p-1">
-        {/* Logo Image */}
-        <Link to="/" className="flex items-center">
-          <img
-            src="https://res.cloudinary.com/dswehdo2v/image/upload/v1742344508/logo_bgzmmt.svg"
-            alt="Flora Pop Logo"
-            className="w-[10vh] h-[10vh] mr-2"
-          />
-        </Link>
+    <nav className="bg-floraPeach shadow-md fixed top-0 left-0 w-full z-50">
+      <div className="container mx-auto flex items-center justify-between p-1">
+        {/* Left Side: Logo and Navigation Links */}
+        <div className="flex items-center gap-6">
+          {/* Logo */}
+          <Link to="/" className="flex items-center">
+            <img
+              src="https://res.cloudinary.com/dswehdo2v/image/upload/v1742344508/logo_bgzmmt.svg"
+              alt="Flora Pop Logo"
+              className="w-[10vh] h-[10vh] mr-2 transition-transform duration-300 hover:scale-105"
+            />
+          </Link>
 
-        {/* Desktop Navigation and Icons */}
-        <div className="hidden md:flex items-center gap-6">
-          {navItems.map((item) => (
-            <NavItem key={item.to} to={item.to} label={item.label} />
-          ))}
-          {/* Search Icon */}
-          <Link to="/search" className="hover:text-floraPink" style={{ textDecoration: "none" }}>
+          {/* Navigation Links (Desktop) */}
+          <div className="hidden md:flex items-center gap-6">
+            {navItems.map((item) => (
+              <NavItem key={item.to} to={item.to} label={item.label} />
+            ))}
+          </div>
+        </div>
+
+        {/* Right Side: Search and Cart Icons */}
+        <div className="flex items-center gap-4">
+          <Link
+            to="/search"
+            className="text-gray-800 transition-all duration-300 hover:text-floraPink hover:scale-110"
+            style={{ textDecoration: "none" }}
+          >
             <FaSearch size={20} />
           </Link>
-          {/* Cart Icon */}
-          <Link to="/cart" className="hover:text-floraPink" style={{ textDecoration: "none" }}>
+          <Link
+            to="/cart"
+            className="text-gray-800 transition-all duration-300 hover:text-floraPink hover:scale-110"
+            style={{ textDecoration: "none" }}
+          >
             <FaShoppingCart size={20} />
           </Link>
         </div>
-
-        {/* Mobile Menu Toggle */}
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-        </button>
       </div>
-
-      {/* Mobile Navigation */}
-      {isOpen && (
-        <div className="md:hidden bg-floraPink p-4">
-          {navItems.map((item) => (
-            <NavItem
-              key={item.to}
-              to={item.to}
-              label={item.label}
-              isMobile={true}
-              onClick={() => setIsOpen(false)}
-            />
-          ))}
-          {/* Mobile Search Icon */}
-          <Link
-            to="/search"
-            className="block py-2 hover:text-floraPink"
-            style={{ textDecoration: "none" }}
-            onClick={() => setIsOpen(false)}
-          >
-            <FaSearch size={20} /> البحث
-          </Link>
-          {/* Mobile Cart Icon */}
-          <Link
-            to="/cart"
-            className="block py-2 hover:text-floraPink"
-            style={{ textDecoration: "none" }}
-            onClick={() => setIsOpen(false)}
-          >
-            <FaShoppingCart size={20} /> العربة
-          </Link>
-        </div>
-      )}
     </nav>
   );
 };
